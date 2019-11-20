@@ -10,7 +10,7 @@ const minimize
         || process.argv.indexOf('--optimize-minimize') !== -1;
 
 const config = {
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     mode: minimize ? 'production' : 'development',
     module: {
         rules: [ {
@@ -55,20 +55,21 @@ const config = {
         // Allow the use of the real filename of the module being executed. By
         // default Webpack does not leak path-related information and provides a
         // value that is a mock (/index.js).
-        __filename: true
+        __filename: true,
+        fs: 'empty'
     },
     optimization: {
         concatenateModules: minimize
     },
     output: {
-        filename: `[name]${minimize ? '.min' : ''}.js`,
+        filename: `[name]${true ? '.min' : ''}.js`,
         path: process.cwd(),
-        sourceMapFilename: `[name].${minimize ? 'min' : 'js'}.map`
+        sourceMapFilename: `[name].${true ? 'min' : 'js'}.map`
     },
     performance: {
         hints: minimize ? 'error' : false,
-        maxAssetSize: 750 * 1024,
-        maxEntrypointSize: 750 * 1024
+        maxAssetSize: 750 * 1024 * 1024,
+        maxEntrypointSize: 750 * 1024 * 1024
     },
     plugins: [
         analyzeBundle

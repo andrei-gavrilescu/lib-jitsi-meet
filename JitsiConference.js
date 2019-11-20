@@ -17,6 +17,7 @@ import P2PDominantSpeakerDetection from './modules/detection/P2PDominantSpeakerD
 import RTC from './modules/RTC/RTC';
 import TalkMutedDetection from './modules/detection/TalkMutedDetection';
 import VADTalkMutedDetection from './modules/detection/VADTalkMutedDetection';
+import EchoDetector from './modules/detection/echo/EchoDetector';
 import * as DetectionEvents from './modules/detection/DetectionEvents';
 import NoAudioSignalDetection from './modules/detection/NoAudioSignalDetection';
 import browser from './modules/browser';
@@ -372,6 +373,11 @@ JitsiConference.prototype._init = function(options = {}) {
     // Always add listeners because on reload we are executing leave and the
     // listeners are removed from statistics module.
     this.eventManager.setupStatisticsListeners();
+    this._echoDetector = EchoDetector.create(this);
+    this._echoDetector.on(DetectionEvents.ECHO_DETECTED, (eventData) => {
+        this.eventEmitter.emit(JitsiConferenceEvents.PARTICIPANT_ECHO, eventData);
+    });
+
 
     if (config.enableTalkWhileMuted) {
         // If VAD processor factory method is provided uses VAD based detection, otherwise fallback to audio level

@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import RTC from '../RTC/RTC';
+import RTC from '../../RTC/RTC';
 import { PCM_SAMPLE_PUBLISHED } from '../DetectionEvents';
 
 /**
@@ -99,7 +99,6 @@ export default class PCMGenerator extends EventEmitter {
     _onAudioProcess(audioEvent) {
         // Prepend the residue PCM buffer from the previous process callback.
         const inData = audioEvent.inputBuffer.getChannelData(0);
-        const completeInData = [ ...this._bufferResidue, ...inData ];
         const sampleTimestamp = Date.now();
 
         /**
@@ -113,7 +112,7 @@ export default class PCMGenerator extends EventEmitter {
          */
         this.emit(PCM_SAMPLE_PUBLISHED, {
             timestamp: sampleTimestamp,
-            pcmSample: completeInData,
+            pcmData: inData,
             deviceId: this._localTrack.getDeviceId()
         });
     }

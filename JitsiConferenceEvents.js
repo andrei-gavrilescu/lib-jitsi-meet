@@ -251,6 +251,11 @@ export const TALK_WHILE_MUTED = 'conference.talk_while_muted';
 export const NO_AUDIO_INPUT = 'conference.no_audio_input';
 
 /**
+ * Event indicates that the current selected input device has no signal
+ */
+export const PARTICIPANT_ECHO = 'conference.participant_echo';
+
+/**
  * A new media track was added to the conference. The event provides the
  * following parameters to its listeners:
  *
